@@ -1,2 +1,2 @@
 # testing-code
-The reason i created my repository is beacuse I want a shareable link
+Plagiarism Tool – initial upload, contains index.html, CSS, JS and all related files.
