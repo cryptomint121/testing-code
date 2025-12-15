@@ -1,9 +1,5 @@
 These suggestions have NOT been applied to the main codebase.
 They are included for reference and comparison only
-🔍 **بھائی، میں نے آپ کا پورا کوڈ دیکھ لیا ہے اور دو بڑے مسائل کی نشاندہی کرتا ہوں۔** میں نے آپ کے کوڈ کو اپنے سسٹم پر چلا کر مکمل ٹیسٹ کیا ہے۔
-
-آپ ٹھیک کہہ رہے ہیں، **"Check Plagiarism"** بٹن کلک کرنے پر بالکل کچھ نہیں ہو رہا، اور **ڈارک موڈ بھی نہیں چل رہا**۔
-
 ---
 
 ## **📍 PROBLEM 1: "CHECK PLAGIARISM" BUTTON KAAM NAHI KAR RAHA**
