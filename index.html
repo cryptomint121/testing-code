@@ -1829,7 +1829,7 @@
                     
                     const detector = new PlagiarismDetector();
                     updateProgress(60, 'Calculating similarity...');
-	         try {
+             try {
         results = detector.detectPlagiarism(originalText, suspiciousText, options);
     } catch (error) {
         console.error("❌ DETECTOR ERROR:", error);
@@ -2540,5 +2540,7 @@ The core algorithms are open for educational purposes.`);
             </script>
 </body>
 </html>
+
+
 
 
