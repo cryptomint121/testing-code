@@ -1113,15 +1113,18 @@
             initializeApp();
         });
         function initializeApp() {
-            // Theme toggle
-            document.getElementById('themeToggle').addEventListener('click', function() {
-                document.body.classList.toggle('dark-mode');
-                this.querySelector('i').className = document.body.classList.contains('dark-mode') 
-                    ? 'fas fa-sun' 
-                    : 'fas fa-moon';
-                localStorage.setItem('theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
-            });
-
+               // Theme toggle - FIXED
+    document.getElementById('themeToggle').addEventListener('click', function() {
+        document.body.classList.toggle('dark-mode');
+        const icon = this.querySelector('i');
+        if (document.body.classList.contains('dark-mode')) {
+            icon.className = 'fas fa-sun';
+            localStorage.setItem('theme', 'dark');
+        } else {
+            icon.className = 'fas fa-moon';
+            localStorage.setItem('theme', 'light');
+        }
+    });
             // Check saved theme
             if (localStorage.getItem('theme') === 'dark') {
                 document.body.classList.add('dark-mode');
@@ -1795,9 +1798,9 @@
             const originalText = document.getElementById('originalText').value.trim();
             const suspiciousText = document.getElementById('suspiciousText').value.trim();
             
-            if (!validateInput(originalText, suspiciousText)) {
-                return;
-            }
+               // if (!validateInput(originalText, suspiciousText)) {
+    //     return;
+    // }
 
             // Show loading
             document.getElementById('loadingSection').classList.add('active');
@@ -1839,8 +1842,8 @@
         orderSimilarity: 0,
         exactMatches: [],
         commonPhrases: [],
-        originalWordCount: countWords(originalText),
-        suspiciousWordCount: countWords(suspiciousText),
+        originalWordCount: originalText.trim().split(/\s+/).filter(w => w.length > 0).length,
+suspiciousWordCount: suspiciousText.trim().split(/\s+/).filter(w => w.length > 0).length,
         commonWordCount: 0,
         highlights: { original: originalText, suspicious: suspiciousText },
         verdict: {
