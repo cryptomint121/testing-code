@@ -1112,7 +1112,6 @@
         document.addEventListener('DOMContentLoaded', function() {
             initializeApp();
         });
-
         function initializeApp() {
             // Theme toggle
             document.getElementById('themeToggle').addEventListener('click', function() {
@@ -1830,29 +1829,28 @@
                     const detector = new PlagiarismDetector();
                     updateProgress(60, 'Calculating similarity...');
              try {
-        results = detector.detectPlagiarism(originalText, suspiciousText, options);
-    } catch (error) {
-        console.error("❌ DETECTOR ERROR:", error);
-        results = {
-            score: 0,
-            wordSimilarity: 0,
-            phraseSimilarity: 0,
-            orderSimilarity: 0,
-            exactMatches: [],
-            commonPhrases: [],
-            originalWordCount: 0,
-            suspiciousWordCount: 0,
-            commonWordCount: 0,
-            highlights: { original: originalText, suspicious: suspiciousText },
-            verdict: {
-                level: 'good',
-                title: 'Test Result',
-                message: 'Testing mode',
-                suggestion: 'Please check manually',
-                color: '#16a34a'
-            }
-        };
-    }
+    results = detector.detectPlagiarism(originalText, suspiciousText, options);
+} catch (error) {
+    console.error("❌ DETECTOR ERROR:", error);
+    results = {
+        score: 0,
+        wordSimilarity: 0,
+        phraseSimilarity: 0,
+        orderSimilarity: 0,
+        exactMatches: [],
+        commonPhrases: [],
+        originalWordCount: countWords(originalText),
+        suspiciousWordCount: countWords(suspiciousText),
+        commonWordCount: 0,
+        highlights: { original: originalText, suspicious: suspiciousText },
+        verdict: {
+            level: 'good',
+            title: 'Test Result',
+            message: 'Testing mode',
+            suggestion: 'Please check manually',
+            color: '#16a34a'
+        }
+    };
 }
 
                     results = detector.detectPlagiarism(originalText, suspiciousText, options);
