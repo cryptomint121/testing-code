@@ -1897,8 +1897,8 @@ suspiciousWordCount: suspiciousText.trim().split(/\s+/).filter(w => w.length > 0
     console.log("Original text:", originalText);  // YEH LINE ADD
     console.log("Suspicious text:", suspiciousText);  // YEH LINE ADD
     
-    const originalWords = countWords(originalText);
-    const suspiciousWords = countWords(suspiciousText);
+    const originalWords = originalText.trim().split(/\s+/).length; // ✅
+const suspiciousWords = suspiciousText.trim().split(/\s+/).length; // ✅
     
     if (originalWords === 0 && suspiciousWords === 0) {
         showError('Please enter text in both boxes.');
