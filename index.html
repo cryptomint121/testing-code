@@ -1138,6 +1138,9 @@
             // Search suggestions
             document.getElementById('searchInput').addEventListener('input', showSuggestions);
             document.getElementById('searchInput').addEventListener('focus', showSuggestions);
+// Search highlighting
+    document.getElementById('searchInput').addEventListener('input', highlightSearchInText);
+
 
             // File upload events
             const fileUploadArea = document.getElementById('fileUploadArea');
@@ -1445,6 +1448,49 @@
             suspiciousText.value += (suspiciousText.value ? '\n\n' : '') + phrase;
             updateTextStats();
         }
+// ==================== SEARCH HIGHLIGHTING FUNCTION ====================
+function highlightSearchInText() {
+    // Step 1: Search box se word lo
+    const searchWord = document.getElementById('searchInput').value.trim();
+    
+    // Step 2: Dono text boxes se text lo
+    const originalText = document.getElementById('originalText').value;
+    const textToCheck = document.getElementById('suspiciousText').value;
+    
+    // Step 3: Agar search box khali hai toh highlight hatao
+    if (searchWord === '') {
+        document.getElementById('originalText').value = originalText;
+        document.getElementById('suspiciousText').value = textToCheck;
+        return;
+    }
+    
+    // Step 4: Highlight karna
+    // Yellow color ke liye <mark> tag use karo
+    const highlightedOriginal = originalText.replace(
+        new RegExp(`(${searchWord})`, 'gi'),
+        '<mark style="background-color: yellow; font-weight: bold;">$1</mark>'
+    );
+    
+    const highlightedSuspicious = textToCheck.replace(
+        new RegExp(`(${searchWord})`, 'gi'),
+        '<mark style="background-color: yellow; font-weight: bold;">$1</mark>'
+    );
+    
+    // Step 5: Display areas mein show karo
+    // Note: Hum textarea mein HTML nahi dikha sakte, isliye alag display areas use karenge
+    const originalDisplay = document.getElementById('originalHighlighted');
+    const suspiciousDisplay = document.getElementById('suspiciousHighlighted');
+    
+    if (originalDisplay) {
+        originalDisplay.innerHTML = highlightedOriginal;
+    }
+    
+    if (suspiciousDisplay) {
+        suspiciousDisplay.innerHTML = highlightedSuspicious;
+    }
+    
+    console.log("✅ Search word highlighted:", searchWord);
+}
 
         // ==================== TEXT STATS ====================
         function debounceUpdateStats() {
