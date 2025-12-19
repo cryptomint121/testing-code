@@ -1826,22 +1826,10 @@
                     // Fallback to main thread
                     await new Promise(resolve => setTimeout(resolve, 500));
                     
-                                updateProgress(60, 'Calculating similarity...');
-            
-            try {
-                // ✅ SAFETY CHECK: First check if detector exists
-                if (typeof PlagiarismDetector !== 'function') {
-                    throw new Error("PlagiarismDetector class not loaded");
-                }
-                
-                const detector = new PlagiarismDetector();
-                
-                // ✅ CHECK: If detectPlagiarism method exists
-                if (!detector.detectPlagiarism || typeof detector.detectPlagiarism !== 'function') {
-                    throw new Error("detectPlagiarism method not found");
-                }
-                
-                results = detector.detectPlagiarism(originalText, suspiciousText, options);
+                    const detector = new PlagiarismDetector();
+                    updateProgress(60, 'Calculating similarity...');
+             try {
+    results = detector.detectPlagiarism(originalText, suspiciousText, options);
 } catch (error) {
     console.error("❌ DETECTOR ERROR:", error);
     results = {
@@ -1888,37 +1876,11 @@ suspiciousWordCount: suspiciousText.trim().split(/\s+/).filter(w => w.length > 0
                     scrollToResults();
                 }, 500);
                 
-                        } catch (error) {
-                console.error("❌ MAIN CATCH ERROR:", error);
-                
-                // ✅ FALLBACK: Use simple comparison if detector fails
-                try {
-                    console.log("🔄 Using fallback comparison...");
-                    results = getSimpleComparison(originalText, suspiciousText);
-                    
-                    // Continue with normal flow
-                    updateProgress(90, 'Generating report...');
-                    displayResults(results);
-                    updateTotalChecks();
-                    
-                    if (document.getElementById('showParaphrasing').checked && results.score > 30) {
-                        showParaphrasingSuggestions(results.exactMatches);
-                    }
-                    
-                    updateProgress(100, 'Complete!');
-                    
-                    setTimeout(() => {
-                        document.getElementById('loadingSection').classList.remove('active');
-                        document.getElementById('resultsSection').classList.add('active');
-                        scrollToResults();
-                    }, 500);
-                    
-                } catch (fallbackError) {
-                    // If fallback also fails
-                    showError(`Analysis failed: ${error.message}. Fallback also failed: ${fallbackError.message}`);
-                    document.getElementById('loadingSection').classList.remove('active');
-                }
+            } catch (error) {
+                showError(`Analysis failed: ${error.message}`);
+                document.getElementById('loadingSection').classList.remove('active');
             }
+        }
 
         function updateProgress(value, text) {
             const progressBar = document.getElementById('progressBar');
@@ -2529,51 +2491,7 @@ This tool is provided "as is" without warranties. The developers are not respons
 6. Open Source
 The core algorithms are open for educational purposes.`);
         }
-// ==================== SIMPLE COMPARISON FALLBACK ====================
-function getSimpleComparison(text1, text2) {
-    console.log("🔄 Running simple comparison fallback");
-    
-    // Simple word matching
-    const words1 = text1.toLowerCase().split(/\s+/).filter(w => w.length > 2);
-    const words2 = text2.toLowerCase().split(/\s+/).filter(w => w.length > 2);
-    
-    const commonWords = words1.filter(word => words2.includes(word));
-    const totalUniqueWords = [...new Set([...words1, ...words2])].length;
-    
-    const score = totalUniqueWords > 0 ? 
-        Math.round((commonWords.length / totalUniqueWords) * 100) : 0;
-    
-    return {
-        score: score,
-        wordSimilarity: score,
-        phraseSimilarity: 0,
-        orderSimilarity: 0,
-        exactMatches: [],
-        commonPhrases: [],
-        originalWordCount: words1.length,
-        suspiciousWordCount: words2.length,
-        commonWordCount: commonWords.length,
-        highlights: { 
-            original: text1, 
-            suspicious: text2 
-        },
-        verdict: {
-            level: score > 70 ? 'danger' : score > 30 ? 'warning' : 'good',
-            title: score > 70 ? 'High Similarity' : 
-                   score > 30 ? 'Moderate Similarity' : 'Low Similarity',
-            message: 'Analysis complete using simple comparison',
-            suggestion: 'For better accuracy, ensure texts are 100+ words',
-            color: score > 70 ? '#dc2626' : score > 30 ? '#f59e0b' : '#16a34a'
-        }
-    };
-}
 
-// ==================== INSTRUCTIONS ====================
-function showInstructions() {
-    alert(`INSTRUCTIONS
-    ...instructions ka text...
-    `);
-}
         function showInstructions() {
             alert(`INSTRUCTIONS
 
