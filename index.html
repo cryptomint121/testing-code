@@ -2090,26 +2090,7 @@ resultDescription.textContent = results.verdict?.message || 'Plagiarism detectio
                 html += `</div></div>`;
             }
 
-                detailedResults.innerHTML = html;
-    
-    // ✅ YEH CODE ADD KARO (highlighting ka):
-    // Update highlights in split view
-    if (results.highlights && results.highlights.original && results.highlights.suspicious) {
-        document.getElementById('originalHighlighted').innerHTML = 
-            results.highlights.original.replace(/\n/g, '<br>');
-        document.getElementById('suspiciousHighlighted').innerHTML = 
-            results.highlights.suspicious.replace(/\n/g, '<br>');
-    } else {
-        // Agar highlights nahi hai toh simple text daldo
-        document.getElementById('originalHighlighted').innerHTML = 
-            document.getElementById('originalText').value.replace(/\n/g, '<br>');
-        document.getElementById('suspiciousHighlighted').innerHTML = 
-            document.getElementById('suspiciousText').value.replace(/\n/g, '<br>');
-    }
-    
-    // Update chart
-    updateChart(results);
-}
+            detailedResults.innerHTML = html;
         }
 
         function updateChart(results) {
