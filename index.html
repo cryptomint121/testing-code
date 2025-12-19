@@ -1453,41 +1453,45 @@ function highlightSearchInText() {
     // Step 1: Search box se word lo
     const searchWord = document.getElementById('searchInput').value.trim();
     
-    // Step 2: Dono text boxes se text lo
-    const originalText = document.getElementById('originalText').value;
-    const textToCheck = document.getElementById('suspiciousText').value;
-    
-    // Step 3: Agar search box khali hai toh highlight hatao
-    if (searchWord === '') {
-        document.getElementById('originalText').value = originalText;
-        document.getElementById('suspiciousText').value = textToCheck;
-        return;
-    }
-    
-    // Step 4: Highlight karna
-    // Yellow color ke liye <mark> tag use karo
-    const highlightedOriginal = originalText.replace(
-        new RegExp(`(${searchWord})`, 'gi'),
-        '<mark style="background-color: yellow; font-weight: bold;">$1</mark>'
-    );
-    
-    const highlightedSuspicious = textToCheck.replace(
-        new RegExp(`(${searchWord})`, 'gi'),
-        '<mark style="background-color: yellow; font-weight: bold;">$1</mark>'
-    );
-    
-    // Step 5: Display areas mein show karo
-    // Note: Hum textarea mein HTML nahi dikha sakte, isliye alag display areas use karenge
+    // Step 2: Display boxes se text lo (NOT textareas)
     const originalDisplay = document.getElementById('originalHighlighted');
     const suspiciousDisplay = document.getElementById('suspiciousHighlighted');
     
-    if (originalDisplay) {
-        originalDisplay.innerHTML = highlightedOriginal;
+    // Step 3: Agar display boxes nahi hai, to kuch na karo
+    if (!originalDisplay || !suspiciousDisplay) {
+        console.log("Display elements not found yet.");
+        return;
     }
     
-    if (suspiciousDisplay) {
-        suspiciousDisplay.innerHTML = highlightedSuspicious;
+    let originalText = originalDisplay.textContent; // Use textContent
+    let suspiciousText = suspiciousDisplay.textContent;
+    
+    // Step 4: Agar search box khali hai toh highlight hatao
+    if (searchWord === '') {
+        originalDisplay.innerHTML = originalText; // Plain text wapas daalo
+        suspiciousDisplay.innerHTML = suspiciousText;
+        return;
     }
+    
+    // Step 5: Special characters se bachao (escape karo)
+    const escapedWord = searchWord.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    
+    // Step 6: Highlight karna aur display boxes mein dikhana
+    const highlightRegex = new RegExp(`(${escapedWord})`, 'gi');
+    
+    const highlightedOriginal = originalText.replace(
+        highlightRegex,
+        '<mark style="background-color: yellow; font-weight: bold; border-radius: 3px; padding: 0 2px;">$1</mark>'
+    );
+    
+    const highlightedSuspicious = suspiciousText.replace(
+        highlightRegex,
+        '<mark style="background-color: yellow; font-weight: bold; border-radius: 3px; padding: 0 2px;">$1</mark>'
+    );
+    
+    // Step 7: Display boxes ko update karo
+    originalDisplay.innerHTML = highlightedOriginal;
+    suspiciousDisplay.innerHTML = highlightedSuspicious;
     
     console.log("✅ Search word highlighted:", searchWord);
 }
@@ -1986,12 +1990,15 @@ if (!results.verdict) {
             resultTitle.textContent = results.verdict?.title || 'Analysis Complete';
 resultDescription.textContent = results.verdict?.message || 'Plagiarism detection results';
 
-            // Update highlights in split view
-            if (results.highlights) {
-                document.getElementById('originalHighlighted').innerHTML = 
-                    results.highlights.original.replace(/\n/g, '<br>');
-                document.getElementById('suspiciousHighlighted').innerHTML = 
-                    results.highlights.suspicious.replace(/\n/g, '<br>');
+                        // ✅ TEXT KO PLAIN SET KARO, HTML NAHI
+            document.getElementById('originalHighlighted').textContent = results.highlights.original;
+            document.getElementById('suspiciousHighlighted').textContent = results.highlights.suspicious;
+            
+            // ✅ AGAR SEARCH BOX MEIN KUCH HAI, TOH HIGHLIGHT KARO
+            if (document.getElementById('searchInput').value.trim() !== '') {
+                setTimeout(() => {
+                    highlightSearchInText();
+                }, 100);
             }
 
             // Update chart
